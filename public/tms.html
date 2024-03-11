@@ -1,0 +1,146 @@
+
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Chat com API</title>
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        background-color: #f4f4f4;
+        margin: 0;
+        padding: 0;
+    }
+    .container {
+        max-width: 600px;
+        margin: 20px auto;
+        padding: 20px;
+        background-color: #fff;
+        border-radius: 5px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        position: relative;
+    }
+    input[type="text"] {
+        width: calc(100% - 110px);
+        padding: 10px;
+        margin-bottom: 10px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        font-size: 16px;
+    }
+    input[type="submit"] {
+        width: 100px;
+        padding: 10px;
+        margin-left: 10px;
+        border: none;
+        border-radius: 5px;
+        background-color: #007bff;
+        color: #fff;
+        font-size: 16px;
+        cursor: pointer;
+    }
+    #messages {
+        margin-top: 20px;
+        overflow: auto;
+        max-height: 400px; /* Limita a altura das mensagens para que haja uma barra de rolagem quando muitas mensagens forem exibidas */
+    }
+    .message {
+        padding: 10px;
+        margin-bottom: 10px;
+        border-radius: 5px;
+        overflow: hidden;
+    }
+    .message img {
+        float: left;
+        margin-right: 10px;
+        border-radius: 50%;
+        width: 40px; /* Ajuste o tamanho da imagem conforme necessário */
+        height: 40px; /* Ajuste o tamanho da imagem conforme necessário */
+    }
+    .user img {
+        position: absolute;
+        top: 20px;
+        right: 20px;
+        border-radius: 50%;
+        width: 40px; /* Ajuste o tamanho da imagem conforme necessário */
+        height: 40px; /* Ajuste o tamanho da imagem conforme necessário */
+    }
+    .message-content {
+        overflow: hidden;
+    }
+    .copy-icon {
+        margin-right: 5px;
+        border-radius: 0%;
+        float: right;
+        cursor: pointer;
+    }
+</style>
+</head>
+<body>
+<div class="container">
+    <div id="messages"></div>
+    <input type="text" id="userInput" placeholder="Digite sua mensagem..." onkeypress="handleKeyPress(event)">
+    <input type="submit" value="Enviar" onclick="sendMessage()">
+    <div class="user"><img src="https://pedrozz-api.onrender.com/travazap?apikey=pedrozz13" alt="User"></div>
+</div>
+
+<script>
+    function sendMessage() {
+        var userInput = document.getElementById('userInput').value;
+        var messagesDiv = document.getElementById('messages');
+
+        // Adiciona a mensagem do usuário ao chat
+        messagesDiv.innerHTML += '<div class="message user"><div class="message-content">' + userInput + '</div></div>';
+
+        // Envia a mensagem para a API
+        fetch('https://aemt.me/gpt4?text=finja%20que%20voce%20aja%20como%20se%20foce%20seu%20namo%20muito%20ame%20tem%20que%20responder%3A%20bom%20diarado%20e%20o%20texto%20que%20voce%20vai%20vai%20responder: ' + encodeURIComponent(userInput))
+        .then(response => response.json())
+        .then(data => {
+      // Adiciona a resposta da API ao chat
+          messagesDiv.innerHTML += '<div class="message bot"><img src="https://telegra.ph/file/8ff3f6e58eaaadafd5db7.jpg" alt="Bot"> <div class="message-content">' + escapeHtml(data.result) + '</div> <img class="copy-icon" src="https://telegra.ph/file/e3ef941efe7661a55677b.jpg" alt="Copy" onclick="copyToClipboard(\'' + data.result + '\')"></div>';
+      })
+      .catch(error => {
+          console.error('Erro ao enviar mensagem para a API:', error);
+      });
+
+        // Limpa o campo de entrada
+        document.getElementById('userInput').value = '';
+
+        // Rola para baixo automaticamente
+        messagesDiv.scrollTop = messagesDiv.scrollHeight;
+    }
+
+    function copyToClipboard(text) {
+        var textarea = document.createElement('textarea');
+        textarea.value = text;
+        document.body.appendChild(textarea);
+        textarea.select();
+        document.execCommand('copy');
+        document.body.removeChild(textarea);
+        alert('Resposta copiada para a área de transferência: ' + text);
+    }
+
+    // Função para escapar caracteres HTML especiais
+    function escapeHtml(text) {
+        var map = {
+            '&': '&amp;',
+            '<': '&lt;',
+            '>': '&gt;',
+            '"': '&quot;',
+            "'": '&#039;'
+        };
+
+        return text.replace(/[&<>"']/g, function(m) { return map[m]; });
+    }
+
+    // Função para lidar com a tecla "Enter"
+    function handleKeyPress(event) {
+        if (event.keyCode === 13) {
+            sendMessage();
+        }
+    }
+</script>
+</body>
+</html>
