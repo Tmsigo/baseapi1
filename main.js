@@ -349,3 +349,51 @@ router.post('/post/body', async (req, res) => {
 
 
 module.exports = router
+
+
+
+router.get('/api/audiomenu', async(req, res, next) => {
+
+  try {
+    const text = req.query.text1;
+    if (!text) return res.json("coloca o nome");
+
+    fetch("https://api.sabapi.tech/api/audiomeme?query=" + text + "&apikey=@Luix1397")
+      .then(response => response.json())
+      .then(data => {
+        res.json({
+          status: true,
+          code: 200,
+          criador: `PedrozzMods`,
+          resultado: data.resultado
+        });
+      })
+      .catch(error => {
+        console.log(error);
+        res.send(`Deu erro: ${error}`);
+      });
+  } catch (error) {
+    console.log(error);
+    res.send(`Deu erro: ${error}`);
+  }
+});
+
+router.get('/api/stalkytb', async (req, res, next) => {
+  try {
+    const text = req.query.text1;
+    if (!text) return res.status(400).json({ error: "Por favor, forneça um nome de canal do YouTube." });
+    const response = await fetch(`https://api.lolhuman.xyz/api/ytchannel?apikey=Gatadios&query=${text}`);
+    const data = await response.json();
+    if (!response.ok) {
+      throw new Error(`Erro ao acessar a API externa: ${response.statusText}`);
+    }
+    res.status(200).json({
+      status: true,
+      criador: `@ PedrozzMods`,
+      resultado: data.result
+    });
+  } catch (error) {
+    console.error('Erro:', error);
+    res.status(500).json({ error: 'Ocorreu um erro durante o processamento da solicitação.' });
+  }
+});
