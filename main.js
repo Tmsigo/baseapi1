@@ -15,7 +15,7 @@ const {
   ytSearch
 } = require("./lib/youtube");
 
-var criador = ['pedrozz_Mods'];
+var criador = ['LORD IGO'];
 var key = 'rayk'
 
 resposta = {
