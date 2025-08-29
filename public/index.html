@@ -1,9 +1,10 @@
-                <!DOCTYPE html>
+                
+        <!DOCTYPE html>
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Organização de Estoque</title>
+    <title>AD MOTOS - Controle de Estoque</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <style>
         * {
@@ -16,20 +17,22 @@
         body {
             background-color: #f5f7fa;
             color: #333;
+            overflow-x: hidden;
         }
 
         header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 15px 25px;
+            padding: 18px 25px;
             background-color: #007bff;
             color: white;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 3px 12px rgba(0, 0, 0, 0.15);
         }
 
         header h1 {
-            font-size: 20px;
+            font-size: 22px;
+            letter-spacing: 1px;
         }
 
         .estoque-btn {
@@ -59,7 +62,7 @@
         h2 {
             text-align: center;
             margin-bottom: 15px;
-            color: #333;
+            color: #007bff;
         }
 
         .form-container {
@@ -69,7 +72,7 @@
             flex-wrap: wrap;
         }
 
-        input {
+        input, select {
             flex: 1;
             padding: 10px;
             border: 1px solid #ccc;
@@ -78,7 +81,7 @@
             transition: all 0.2s ease;
         }
 
-        input:focus {
+        input:focus, select:focus {
             border-color: #007bff;
         }
 
@@ -96,20 +99,12 @@
             background-color: #0056b3;
         }
 
-        .search-container {
-            margin-bottom: 15px;
-        }
-
-        .search-container input {
-            width: 100%;
-        }
-
-        /* Estilo do painel lateral */
+        /* Painel lateral escondido */
         .estoque-panel {
             position: fixed;
             top: 0;
             right: -100%;
-            width: 450px;
+            width: 480px;
             height: 100%;
             background-color: #fff;
             box-shadow: -5px 0 15px rgba(0, 0, 0, 0.2);
@@ -128,6 +123,27 @@
             text-align: center;
             color: #007bff;
             margin-bottom: 10px;
+        }
+
+        .close-btn {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            font-size: 22px;
+            cursor: pointer;
+            color: #007bff;
+        }
+
+        .search-container {
+            margin-bottom: 10px;
+        }
+
+        .search-container input {
+            width: 100%;
+            padding: 10px;
+            border-radius: 8px;
+            border: 1px solid #ccc;
+            outline: none;
         }
 
         table {
@@ -151,13 +167,9 @@
             background-color: #f8f8f8;
         }
 
-        .close-btn {
-            position: absolute;
-            top: 15px;
-            right: 20px;
-            font-size: 22px;
-            cursor: pointer;
-            color: #007bff;
+        .highlight {
+            color: red;
+            font-weight: bold;
         }
 
         .empty {
@@ -192,11 +204,18 @@
         .delete:hover {
             background-color: #b02a37;
         }
+
+        .total {
+            margin-top: 15px;
+            font-weight: bold;
+            color: #007bff;
+            text-align: center;
+        }
     </style>
 </head>
 <body>
     <header>
-        <h1><i class="fas fa-box"></i> Sistema de Estoque</h1>
+        <h1><i class="fas fa-motorcycle"></i> AD MOTOS</h1>
         <button class="estoque-btn" onclick="abrirEstoque()"><i class="fas fa-boxes"></i> Ver Estoque</button>
     </header>
 
@@ -213,7 +232,7 @@
     <!-- Painel lateral de estoque -->
     <div class="estoque-panel" id="estoquePanel">
         <i class="fas fa-times close-btn" onclick="fecharEstoque()"></i>
-        <h3>Estoque</h3>
+        <h3>Estoque - AD MOTOS</h3>
 
         <div class="search-container">
             <input type="text" id="pesquisa" placeholder="Pesquisar peça..." onkeyup="filtrarProdutos()">
@@ -234,6 +253,8 @@
                 </tr>
             </tbody>
         </table>
+
+        <div class="total" id="valorTotal">Total em estoque: R$ 0,00</div>
     </div>
 
     <script>
@@ -247,12 +268,17 @@
             const tabela = document.getElementById("tabela");
             tabela.innerHTML = "";
 
+            let total = 0;
+
             if (produtos.length === 0) {
                 tabela.innerHTML = '<tr class="empty"><td colspan="4">Nenhuma peça cadastrada.</td></tr>';
+                document.getElementById("valorTotal").innerText = "Total em estoque: R$ 0,00";
                 return;
             }
 
             produtos.forEach((p, index) => {
+                total += p.valor * p.quantidade;
+
                 const tr = document.createElement("tr");
                 tr.innerHTML = `
                     <td>${p.nome}</td>
@@ -265,6 +291,8 @@
                 `;
                 tabela.appendChild(tr);
             });
+
+            document.getElementById("valorTotal").innerText = "Total em estoque: R$ " + total.toFixed(2);
         }
 
         function adicionarProduto() {
@@ -315,9 +343,11 @@
             linhas.forEach(linha => {
                 const produto = linha.querySelector("td")?.textContent.toLowerCase();
                 if (produto && produto.includes(pesquisa)) {
+                    linha.querySelector("td").classList.add("highlight");
                     linha.style.display = "";
                 } else {
-                    linha.style.display = "none";
+                    linha.querySelector("td")?.classList.remove("highlight");
+                    linha.style.display = pesquisa === "" ? "" : "none";
                 }
             });
         }
