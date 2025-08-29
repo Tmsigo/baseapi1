@@ -1,258 +1,251 @@
-  <!DOCTYPE html>
-  <html lang="pt-br">
-  <head>
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
     <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" charset="UTF-8" ></script>
-    <link rel="stylesheet" href="/css/style.css">
-   <meta name='viewport' content='width=device-width, initial-scale=1'>
-  <script src='https://kit.fontawesome.com/a076d05399.js' crossorigin='anonymous'></script>
-  <link rel="shortcut icon" href="https://telegra.ph/file/5bd8e0532935bc87ea62f.jpg" type="image/x-icon" />
-    <title>rayk api</title></title>
+    <title>Organização de Estoque</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
 
+        body {
+            background-color: #f7f8fa;
+            color: #333;
+            display: flex;
+            justify-content: center;
+            padding: 20px;
+        }
 
-  </head>
+        .container {
+            width: 90%;
+            max-width: 1000px;
+            background: #fff;
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 5px 25px rgba(0, 0, 0, 0.15);
+        }
 
-<budy>
+        h1 {
+            text-align: center;
+            margin-bottom: 15px;
+            color: #444;
+        }
 
-      <header>
-        <nav>
+        .form-container {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+        }
 
-          <div class="menu-btn">
-            <i class="fas fa-bars"></i>
+        input {
+            flex: 1;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            outline: none;
+            font-size: 14px;
+            transition: all 0.2s ease;
+        }
 
-          </div>
+        input:focus {
+            border-color: #007bff;
+        }
 
+        button {
+            padding: 10px 18px;
+            border: none;
+            background-color: #007bff;
+            color: #fff;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
 
-          </div>
+        button:hover {
+            background-color: #0056b3;
+        }
 
+        .search-container {
+            margin-bottom: 15px;
+        }
 
-          <div class="fe">
-        <a href="https://pedrozz-api.onrender.com/perfil.html">
-      <img src="https://pedrozz-api.onrender.com/femeninotrava?apikey=pedrozz13" alt="Foto" id="imagem" style="cursor: pointer;">
-    </a>
+        .search-container input {
+            width: 100%;
+        }
 
-          </div>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+        }
 
+        table thead {
+            background-color: #007bff;
+            color: #fff;
+        }
 
+        table th, table td {
+            padding: 12px;
+            border-bottom: 1px solid #ddd;
+            text-align: center;
+        }
 
-          <div class="side-bar">
-            <div class="close-btn">
-              <i class="fas fa-times"></i>
-            </div>
+        table tr:hover {
+            background-color: #f2f2f2;
+        }
 
-             <div class="txt">
-  <i class="fas fa-folder"></i><i>RAYK - API</i>
+        .actions button {
+            margin: 0 3px;
+            padding: 5px 10px;
+            border-radius: 5px;
+            border: none;
+            cursor: pointer;
+            transition: 0.3s;
+        }
 
-              </div>
-  <br>
-  <hr>
+        .edit {
+            background-color: #ffc107;
+            color: #fff;
+        }
 
-         <div class="menu">
+        .edit:hover {
+            background-color: #e0a800;
+        }
 
-              <div class="item">
-  <a class="sub-btn"><i class='fas fa-download'></i>DOWNLOADER<i class="fas fa-angle-right dropdown"></i></a>
-  <div class="sub-menu">
+        .delete {
+            background-color: #dc3545;
+            color: #fff;
+        }
 
-<a class="sub-item" target="_blank" href="download/play?&nome=M4rkim gasparzinho &apikey=rayk"
-    target="_blank">PLAY</a>
-    
-<a class="sub-item" target="_blank" href="download/playv?&nome=M4rkim rep&apikey=rayk"
-    target="_blank">PLAY VÍDEO</a>    
-    
-<a class="sub-item" target="_blank" href="download/ytmp3?&link=https://youtu.be/U8i2_6gG110?si=C75VDrmSvDVjzSs2&apikey=rayk"
-    target="_blank">YTMP3</a>    
-    
-<a class="sub-item" target="_blank" href="download/ytmp4?&link=https://youtu.be/U8i2_6gG110?si=C75VDrmSvDVjzSs2&apikey=rayk"
-    target="_blank">YTMP4</a>
-    
-            </div>
-            </div>
-<br></br>        
-         
- <div class="item">
-<a class="sub-btn"><i class='fas fa-camera-retro fa-bounce'></i>CANVAS<i class="fas fa-angle-right dropdown"></i></a>
-<div class="sub-menu">
+        .delete:hover {
+            background-color: #b02a37;
+        }
 
-  <a href="canvas/changemymind?texto=bom dia&apikey=rayk">Canvas ChangeMyMind</a>
-  
-  <a href="canvas/clyde?texto=PEDROZZ O BRABO&apikey=rayk">Canvas clyde</a>
-  
-  <a href="canvas/trigger?url=https://telegra.ph/file/71f0b7f75b12b61178d8a.jpg&apikey=rayk">Canvas Trigger</a>
-</div>
-</div>
-<br></br>
- <div class="item">
-         <a class="sub-btn"><i class='fas fa-robot'></i>IA<i class="fas fa-angle-right dropdown"></i></a>
-         <div class="sub-menu">
+        .empty {
+            text-align: center;
+            padding: 15px;
+            color: #999;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1><i class="fas fa-boxes"></i> Controle de Estoque</h1>
 
-           <a href="ia/gpt4?apikey=rayk&text1=">Gpt</a>
+        <div class="form-container">
+            <input type="text" id="produto" placeholder="Nome do produto">
+            <input type="number" id="quantidade" placeholder="Quantidade" min="1">
+            <button onclick="adicionarProduto()"><i class="fas fa-plus"></i> Adicionar</button>
+        </div>
 
-           <a href="ia/bingia?apikey=rayk&text1=">BingIA</a>
+        <div class="search-container">
+            <input type="text" id="pesquisa" placeholder="Pesquisar produto..." onkeyup="filtrarProdutos()">
+        </div>
 
-           <a href="ia/turbo?apikey=rayk&text1=">Turbo</a>
+        <table>
+            <thead>
+                <tr>
+                    <th>Produto</th>
+                    <th>Quantidade</th>
+                    <th>Ações</th>
+                </tr>
+            </thead>
+            <tbody id="tabela">
+                <tr class="empty">
+                    <td colspan="3">Nenhum produto adicionado.</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
 
-           <a href="ia/gemini?apikey=rayk&text1=">Gemini</a>
+    <script>
+        let produtos = JSON.parse(localStorage.getItem("estoque")) || [];
 
-           <a href="tms .html">CHAT--IA</a>
+        function salvar() {
+            localStorage.setItem("estoque", JSON.stringify(produtos));
+        }
 
-                     </div>
-                     </div>
+        function atualizarTabela() {
+            const tabela = document.getElementById("tabela");
+            tabela.innerHTML = "";
 
-<br></br>
+            if (produtos.length === 0) {
+                tabela.innerHTML = '<tr class="empty"><td colspan="3">Nenhum produto adicionado.</td></tr>';
+                return;
+            }
 
-    <div class="item">
-<a class="sub-btn"><i class='far fa-grin-hearts'></i>NFSW<i class="fas fa-angle-right dropdown"></i></a>
-<div class="sub-menu">
+            produtos.forEach((p, index) => {
+                const tr = document.createElement("tr");
+                tr.innerHTML = `
+                    <td>${p.nome}</td>
+                    <td>${p.quantidade}</td>
+                    <td class="actions">
+                        <button class="edit" onclick="editarProduto(${index})"><i class="fas fa-edit"></i></button>
+                        <button class="delete" onclick="excluirProduto(${index})"><i class="fas fa-trash"></i></button>
+                    </td>
+                `;
+                tabela.appendChild(tr);
+            });
+        }
 
- <a class="dropdown-item" target="_blank" href="loli?apikey=rayk">Nfsw loli</a>
+        function adicionarProduto() {
+            const nome = document.getElementById("produto").value.trim();
+            const quantidade = document.getElementById("quantidade").value;
 
-<a class="dropdown-item" target="_blank" href="shota?apikey=rayk">Nsfw Shota</a>
+            if (nome === "" || quantidade === "" || quantidade <= 0) {
+                alert("Preencha todos os campos corretamente!");
+                return;
+            }
 
-<a class="dropdown-item" target="_blank" href="hentai?apikey=rayk">Nsfw hentai</a>
-</div>
-</div>
-           
-<br></br>
-            
-         <div class="item">
-         <a class="sub-btn"><i class='fas fa-gamepad'></i>GAMES<i class="fas fa-angle-right dropdown"></i></a>
-         <div class="sub-menu">
-           
-           <a href="/">--</a>
+            produtos.push({ nome, quantidade: parseInt(quantidade) });
+            salvar();
+            atualizarTabela();
 
-           <a href="/">--</a>
+            document.getElementById("produto").value = "";
+            document.getElementById("quantidade").value = "";
+        }
 
-           <a href="/">--</a>
+        function excluirProduto(index) {
+            if (confirm("Deseja remover este produto?")) {
+                produtos.splice(index, 1);
+                salvar();
+                atualizarTabela();
+            }
+        }
 
-                     </div>
-                     </div>
-<br></br>
-<br></br>
+        function editarProduto(index) {
+            const novoNome = prompt("Novo nome do produto:", produtos[index].nome);
+            const novaQuantidade = prompt("Nova quantidade:", produtos[index].quantidade);
 
+            if (novoNome && novaQuantidade && novaQuantidade > 0) {
+                produtos[index].nome = novoNome;
+                produtos[index].quantidade = parseInt(novaQuantidade);
+                salvar();
+                atualizarTabela();
+            }
+        }
 
+        function filtrarProdutos() {
+            const pesquisa = document.getElementById("pesquisa").value.toLowerCase();
+            const linhas = document.querySelectorAll("#tabela tr");
 
-            <hr>
-            <br>
-<div class="item">
-  <a class="sub-btn"><i class='fa fa-headset'></i><i class="sup">Suporte</i><i class="fas fa-angle-right dropdown"></i></a>
-<div class="sub-menu">
-<a class="fa fa-phone-square" href="http://wa.me/5588988162764">-TMS_MODS</a>
-</div>
-</div
+            linhas.forEach(linha => {
+                const produto = linha.querySelector("td")?.textContent.toLowerCase();
+                if (produto && produto.includes(pesquisa)) {
+                    linha.style.display = "";
+                } else {
+                    linha.style.display = "none";
+                }
+            });
+        }
 
-          </div>
-          </div>
-          </div>
-
-
-</div>
-</div>
-
-      </nav>
-
-
-    </header>
-<div class="cabeca">
-  <p class="fa fa-layer-group" style="animation: bounce 2s infinite;"> Rayk - Api</p>
-</div>
-
-     <div class="center-image">
-                        <a href="https://telegra.ph/file/2f9c1f632b7f7790f3423.jpg" alt="pedrozz: criador">
-                        <img class="round-image" src="https://pedrozz-api.onrender.com/travazap?apikey=pedrozz13" alt="by Pedrozz">
-                        </a>
-  </div>  
-
-  <br></br>
-      <br></br>
-  <br><br>
-  <h1>base api feita com todo carrinho por PEDROZZ_MODS</h1>
-
-      <br></br>
-    <center>
-    <!-- Contador de visitas -->
-     <h3>NÚMERO DE VISITAS</h3>
-  <div class="contador-visitantes" align="center">
-      <a href="/">
-          <img src="https://contador.s12.com.br/img-195B96Wa65CCDB30-7.gif" border="00000" alt="contador grátis">
-      </a>
-      <script type="text/javascript" src="https://contador.s12.com.br/ad.js?id=ax3yw5zxZz84W7Z1"></script>
-  </div>
-    </center>
-<div tabindex="0" class="content" onfocus="closeSidebar()" id="content">
-</div>
-  </div>
-  
-  <div class="footer-icon d-flex">
-      <a class="btn btn-primary btn-sm-square me-3 rounded-circle text-white" href="#"><i class="fab fa-facebook-f"></i></a>
-      <a class="btn btn-primary btn-sm-square me-3 rounded-circle text-white" href="#"><i class="fab fa-whatsapp"></i></a>
-      <a href="#" class="btn btn-primary btn-sm-square me-3 rounded-circle text-white"><i class="fab fa-instagram"></i></a>
-      <a href="#" class="btn btn-primary btn-sm-square rounded-circle text-white"><i class="fab fa-linkedin-in"></i></a>
-  </div>
-    <!-- Javascript -->
-
-     <script type="text/javascript">
-   // alert('deseja continuar?')
-        $(document).ready(function(){
-
-          $('.sub-btn').click(function(){
-            $(this).next('.sub-menu').slideToggle();
-            $(this).find('.dropdown').toggleClass('rotate');
-          });
-
-          $('.menu-btn').click(function(){
-            $('.side-bar').addClass('active');
-            $('.menu-btn').css("visibility", "hidden");
-          });
-
-          $('.close-btn').click(function(){
-            $('.side-bar').removeClass('active');
-            $('.menu-btn').css("visibility", "visible");
-          });
-
-        });
-
-
-let contador = 1;
-
-setInterval( function(){
-    document.getElementById('slide' + contador).checked = true;
-    contador++;
-
-    if (contador > 5) {
-  contador = 1;
-}
-}, 3000 );
-
-document.addEventListener('DOMContentLoaded', (event) => {
-    showWelcomeBox();
-});
-      
-function closeWelcomeBox() {
-    
-    document.querySelector('.welcome-container').style.display = 'none';
-      }
-      
-function showWelcomeBox() {
-
-    document.getElementById('welcomeBox').style.display = 'block';
-}
-
-function closeWelcomeBox() {
-    document.getElementById('welcomeBox').style.display = 'none';
-}
-
-      
-              </script>
-
-  <script>
-    document.getElementById('imagem').addEventListener('click', function() {
-      window.location.href = 'perfil.html';
-    });
-      </script>
-    <script src="/script/jquery.min.js"></script>
-    <script src="/script/index.js"></script>
- <audio autoplay="true" src="https://c.top4top.io/m_2974euesy9.mp3"></audio>
-</body></html>
+        atualizarTabela();
+    </script>
+</body>
+</html>      
