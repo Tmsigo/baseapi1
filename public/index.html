@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+                <!DOCTYPE html>
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
@@ -10,30 +10,56 @@
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Poppins', sans-serif;
+            font-family: "Poppins", sans-serif;
         }
 
         body {
-            background-color: #f7f8fa;
+            background-color: #f5f7fa;
             color: #333;
+        }
+
+        header {
             display: flex;
-            justify-content: center;
-            padding: 20px;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 25px;
+            background-color: #007bff;
+            color: white;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        header h1 {
+            font-size: 20px;
+        }
+
+        .estoque-btn {
+            padding: 10px 18px;
+            background-color: white;
+            color: #007bff;
+            font-weight: bold;
+            border-radius: 8px;
+            border: none;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .estoque-btn:hover {
+            background-color: #e8e8e8;
         }
 
         .container {
-            width: 90%;
-            max-width: 1000px;
+            max-width: 900px;
+            margin: 30px auto;
             background: #fff;
-            padding: 25px;
+            padding: 20px;
             border-radius: 15px;
-            box-shadow: 0 5px 25px rgba(0, 0, 0, 0.15);
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.15);
         }
 
-        h1 {
+        h2 {
             text-align: center;
             margin-bottom: 15px;
-            color: #444;
+            color: #333;
         }
 
         .form-container {
@@ -46,10 +72,9 @@
         input {
             flex: 1;
             padding: 10px;
-            border: 1px solid #ddd;
+            border: 1px solid #ccc;
             border-radius: 8px;
             outline: none;
-            font-size: 14px;
             transition: all 0.2s ease;
         }
 
@@ -79,39 +104,80 @@
             width: 100%;
         }
 
+        /* Estilo do painel lateral */
+        .estoque-panel {
+            position: fixed;
+            top: 0;
+            right: -100%;
+            width: 450px;
+            height: 100%;
+            background-color: #fff;
+            box-shadow: -5px 0 15px rgba(0, 0, 0, 0.2);
+            padding: 20px;
+            border-radius: 15px 0 0 15px;
+            transition: 0.4s ease-in-out;
+            z-index: 999;
+            overflow-y: auto;
+        }
+
+        .estoque-panel.active {
+            right: 0;
+        }
+
+        .estoque-panel h3 {
+            text-align: center;
+            color: #007bff;
+            margin-bottom: 10px;
+        }
+
         table {
             width: 100%;
             border-collapse: collapse;
-            margin-top: 15px;
+            margin-top: 10px;
         }
 
         table thead {
             background-color: #007bff;
-            color: #fff;
+            color: white;
         }
 
         table th, table td {
-            padding: 12px;
-            border-bottom: 1px solid #ddd;
+            padding: 10px;
+            border-bottom: 1px solid #eee;
             text-align: center;
         }
 
         table tr:hover {
-            background-color: #f2f2f2;
+            background-color: #f8f8f8;
+        }
+
+        .close-btn {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            font-size: 22px;
+            cursor: pointer;
+            color: #007bff;
+        }
+
+        .empty {
+            text-align: center;
+            padding: 15px;
+            color: #777;
         }
 
         .actions button {
-            margin: 0 3px;
             padding: 5px 10px;
-            border-radius: 5px;
             border: none;
+            border-radius: 6px;
             cursor: pointer;
+            margin: 0 2px;
             transition: 0.3s;
         }
 
         .edit {
             background-color: #ffc107;
-            color: #fff;
+            color: white;
         }
 
         .edit:hover {
@@ -120,45 +186,51 @@
 
         .delete {
             background-color: #dc3545;
-            color: #fff;
+            color: white;
         }
 
         .delete:hover {
             background-color: #b02a37;
         }
-
-        .empty {
-            text-align: center;
-            padding: 15px;
-            color: #999;
-        }
     </style>
 </head>
 <body>
-    <div class="container">
-        <h1><i class="fas fa-boxes"></i> Controle de Estoque</h1>
+    <header>
+        <h1><i class="fas fa-box"></i> Sistema de Estoque</h1>
+        <button class="estoque-btn" onclick="abrirEstoque()"><i class="fas fa-boxes"></i> Ver Estoque</button>
+    </header>
 
+    <div class="container">
+        <h2>Cadastrar Produto</h2>
         <div class="form-container">
-            <input type="text" id="produto" placeholder="Nome do produto">
+            <input type="text" id="produto" placeholder="Nome da peça">
             <input type="number" id="quantidade" placeholder="Quantidade" min="1">
+            <input type="number" id="valor" placeholder="Valor R$" min="1">
             <button onclick="adicionarProduto()"><i class="fas fa-plus"></i> Adicionar</button>
         </div>
+    </div>
+
+    <!-- Painel lateral de estoque -->
+    <div class="estoque-panel" id="estoquePanel">
+        <i class="fas fa-times close-btn" onclick="fecharEstoque()"></i>
+        <h3>Estoque</h3>
 
         <div class="search-container">
-            <input type="text" id="pesquisa" placeholder="Pesquisar produto..." onkeyup="filtrarProdutos()">
+            <input type="text" id="pesquisa" placeholder="Pesquisar peça..." onkeyup="filtrarProdutos()">
         </div>
 
         <table>
             <thead>
                 <tr>
-                    <th>Produto</th>
-                    <th>Quantidade</th>
+                    <th>Peça</th>
+                    <th>Qtd</th>
+                    <th>Valor (R$)</th>
                     <th>Ações</th>
                 </tr>
             </thead>
             <tbody id="tabela">
                 <tr class="empty">
-                    <td colspan="3">Nenhum produto adicionado.</td>
+                    <td colspan="4">Nenhuma peça cadastrada.</td>
                 </tr>
             </tbody>
         </table>
@@ -176,7 +248,7 @@
             tabela.innerHTML = "";
 
             if (produtos.length === 0) {
-                tabela.innerHTML = '<tr class="empty"><td colspan="3">Nenhum produto adicionado.</td></tr>';
+                tabela.innerHTML = '<tr class="empty"><td colspan="4">Nenhuma peça cadastrada.</td></tr>';
                 return;
             }
 
@@ -185,6 +257,7 @@
                 tr.innerHTML = `
                     <td>${p.nome}</td>
                     <td>${p.quantidade}</td>
+                    <td>R$ ${p.valor.toFixed(2)}</td>
                     <td class="actions">
                         <button class="edit" onclick="editarProduto(${index})"><i class="fas fa-edit"></i></button>
                         <button class="delete" onclick="excluirProduto(${index})"><i class="fas fa-trash"></i></button>
@@ -197,18 +270,20 @@
         function adicionarProduto() {
             const nome = document.getElementById("produto").value.trim();
             const quantidade = document.getElementById("quantidade").value;
+            const valor = document.getElementById("valor").value;
 
-            if (nome === "" || quantidade === "" || quantidade <= 0) {
+            if (nome === "" || quantidade === "" || valor === "" || quantidade <= 0 || valor <= 0) {
                 alert("Preencha todos os campos corretamente!");
                 return;
             }
 
-            produtos.push({ nome, quantidade: parseInt(quantidade) });
+            produtos.push({ nome, quantidade: parseInt(quantidade), valor: parseFloat(valor) });
             salvar();
             atualizarTabela();
 
             document.getElementById("produto").value = "";
             document.getElementById("quantidade").value = "";
+            document.getElementById("valor").value = "";
         }
 
         function excluirProduto(index) {
@@ -220,12 +295,14 @@
         }
 
         function editarProduto(index) {
-            const novoNome = prompt("Novo nome do produto:", produtos[index].nome);
+            const novoNome = prompt("Novo nome da peça:", produtos[index].nome);
             const novaQuantidade = prompt("Nova quantidade:", produtos[index].quantidade);
+            const novoValor = prompt("Novo valor R$:", produtos[index].valor);
 
-            if (novoNome && novaQuantidade && novaQuantidade > 0) {
+            if (novoNome && novaQuantidade && novoValor && novaQuantidade > 0 && novoValor > 0) {
                 produtos[index].nome = novoNome;
                 produtos[index].quantidade = parseInt(novaQuantidade);
+                produtos[index].valor = parseFloat(novoValor);
                 salvar();
                 atualizarTabela();
             }
@@ -245,7 +322,16 @@
             });
         }
 
+        function abrirEstoque() {
+            document.getElementById("estoquePanel").classList.add("active");
+            atualizarTabela();
+        }
+
+        function fecharEstoque() {
+            document.getElementById("estoquePanel").classList.remove("active");
+        }
+
         atualizarTabela();
     </script>
 </body>
-</html>      
+</html>
