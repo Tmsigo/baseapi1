@@ -3,161 +3,139 @@
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Cantinho da Vanessa</title>
 <style>
-body{font-family:Arial,sans-serif;background:#f5f5f5;margin:0}
-header{background:#c62828;color:#fff;padding:15px;text-align:center}
-.container{padding:15px}
-.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
-.mesa{background:#fff;padding:15px;border-radius:10px;box-shadow:0 2px 5px rgba(0,0,0,.15);cursor:pointer}
-.total{font-weight:bold;color:#c62828}
-#painel{display:none;position:fixed;inset:0;background:#fff;padding:15px;overflow:auto}
-button{background:#c62828;color:#fff;border:none;padding:10px;border-radius:8px;margin:4px;cursor:pointer}
-input,select{padding:8px;width:100%;margin:5px 0}
+:root{
+--vinho:#8B1E1E;--creme:#FFF8F0;--dourado:#C9A227;
+}
+body{margin:0;font-family:Segoe UI,Arial;background:var(--creme);color:#333}
+header{background:linear-gradient(135deg,var(--vinho),#5d1010);color:white;padding:20px;text-align:center}
+h1{margin:0}
+.container{padding:15px;max-width:1100px;margin:auto}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:12px}
+.mesa{background:white;border-radius:16px;padding:15px;box-shadow:0 3px 10px rgba(0,0,0,.12);cursor:pointer}
+.mesa h3{margin:0 0 8px;color:var(--vinho)}
+.valor{font-weight:bold;color:var(--dourado)}
+.card{background:white;padding:15px;border-radius:16px;box-shadow:0 3px 10px rgba(0,0,0,.12);margin-top:15px}
+#painel{display:none;position:fixed;inset:0;background:white;padding:15px;overflow:auto}
+button{background:var(--vinho);color:white;border:none;border-radius:10px;padding:10px 14px;cursor:pointer}
+input,select{width:100%;padding:10px;margin:6px 0;border:1px solid #ccc;border-radius:10px}
 table{width:100%;border-collapse:collapse}
-td,th{border-bottom:1px solid #ddd;padding:8px}
+th,td{padding:10px;border-bottom:1px solid #eee}
 </style>
 </head>
 <body>
-<header><h1>🍽️ Cantinho da Vanessa</h1></header>
+<header>
+<h1>🍽️ Cantinho da Vanessa</h1>
+<p>Controle simples e elegante das mesas</p>
+</header>
 
 <div class="container">
+<div class="card">
+<h2>Resumo</h2>
+<p><b>Faturamento:</b> <span id="fat">R$ 0,00</span></p>
+</div>
+
 <h2>Mesas</h2>
 <div id="mesas" class="grid"></div>
-
-<h2>Resumo do Dia</h2>
-<p id="faturamento"></p>
-
-<h2>Histórico</h2>
-<div id="historico"></div>
 </div>
 
 <div id="painel">
 <h2 id="tituloMesa"></h2>
 
 <select id="produto"></select>
-<input type="number" id="qtd" placeholder="Quantidade" min="1" value="1">
-
-<button onclick="adicionarItem()">Adicionar Pedido</button>
-<button onclick="fecharMesa()">Fechar Conta</button>
+<input type="number" id="qtd" value="1" min="1">
+<button onclick="addPedido()">Adicionar Pedido</button>
+<button onclick="fecharConta()">Fechar Conta</button>
 <button onclick="fecharPainel()">Voltar</button>
 
 <h3>Pedidos</h3>
 <table>
-<thead><tr><th>Item</th><th>Qtd</th><th>Total</th></tr></thead>
-<tbody id="pedidos"></tbody>
+<thead><tr><th>Produto</th><th>Qtd</th><th>Total</th></tr></thead>
+<tbody id="lista"></tbody>
 </table>
 
-<h3 id="totalMesa"></h3>
-
-<hr>
-<h3>Adicionar Produto ao Cardápio</h3>
-<input id="novoNome" placeholder="Nome do produto">
-<input id="novoPreco" type="number" placeholder="Preço">
-<button onclick="novoProduto()">Salvar Produto</button>
+<h2 id="totalMesa"></h2>
 </div>
 
 <script>
-let cardapio=JSON.parse(localStorage.getItem('cv_cardapio'))||[
-{nome:'Espeto de Carne',preco:10},
-{nome:'Espeto de Frango',preco:8},
-{nome:'Espeto de Queijo',preco:7},
+const cardapio=[
+{nome:'Espeto Carne',preco:10},
+{nome:'Espeto Frango',preco:8},
 {nome:'Refrigerante',preco:6},
-{nome:'Coca 2L',preco:12},
 {nome:'Água',preco:3},
 {nome:'Batata Frita',preco:20}
 ];
 
-let mesas=JSON.parse(localStorage.getItem('cv_mesas'))||Array.from({length:10},()=>[]);
-let historico=JSON.parse(localStorage.getItem('cv_historico'))||[];
+let mesas=JSON.parse(localStorage.getItem('cv_mesas_bonito'))||Array.from({length:10},()=>[]);
+let historico=JSON.parse(localStorage.getItem('cv_hist_bonito'))||[];
 let mesaAtual=0;
 
 function salvar(){
-localStorage.setItem('cv_cardapio',JSON.stringify(cardapio));
-localStorage.setItem('cv_mesas',JSON.stringify(mesas));
-localStorage.setItem('cv_historico',JSON.stringify(historico));
+localStorage.setItem('cv_mesas_bonito',JSON.stringify(mesas));
+localStorage.setItem('cv_hist_bonito',JSON.stringify(historico));
 }
 
-function renderMesas(){
-let div=document.getElementById('mesas');
-div.innerHTML='';
+function carregarProdutos(){
+produto.innerHTML='';
+cardapio.forEach((p,i)=>produto.innerHTML+=`<option value="${i}">${p.nome} - R$ ${p.preco}</option>`);
+}
+
+function render(){
+mesasDiv=document.getElementById('mesas');
+mesasDiv.innerHTML='';
 mesas.forEach((m,i)=>{
-let total=m.reduce((s,x)=>s+x.total,0);
-div.innerHTML+=`<div class="mesa" onclick="abrirMesa(${i})">
+let total=m.reduce((a,b)=>a+b.total,0);
+mesasDiv.innerHTML+=`
+<div class="mesa" onclick="abrirMesa(${i})">
 <h3>Mesa ${i+1}</h3>
-<p>${m.length} itens</p>
-<p class="total">R$ ${total.toFixed(2)}</p>
+<p>${m.length} pedidos</p>
+<div class="valor">R$ ${total.toFixed(2)}</div>
 </div>`;
 });
-let fat=historico.reduce((s,x)=>s+x.total,0);
-document.getElementById('faturamento').innerHTML=`Total vendido: <b>R$ ${fat.toFixed(2)}</b>`;
-document.getElementById('historico').innerHTML=historico.map(h=>
-`<div>🧾 Mesa ${h.mesa} - R$ ${h.total.toFixed(2)} - ${h.data}</div>`).join('');
-}
-
-function carregarCardapio(){
-let s=document.getElementById('produto');
-s.innerHTML='';
-cardapio.forEach((p,i)=>{
-s.innerHTML+=`<option value="${i}">${p.nome} - R$ ${p.preco}</option>`;
-});
+fat.innerText='R$ '+historico.reduce((a,b)=>a+b.total,0).toFixed(2);
+salvar();
 }
 
 function abrirMesa(i){
 mesaAtual=i;
-document.getElementById('painel').style.display='block';
-document.getElementById('tituloMesa').innerText='Mesa '+(i+1);
+painel.style.display='block';
+tituloMesa.innerText='Mesa '+(i+1);
 atualizarMesa();
 }
 
-function fecharPainel(){document.getElementById('painel').style.display='none';}
+function fecharPainel(){painel.style.display='none';}
 
 function atualizarMesa(){
-let tbody=document.getElementById('pedidos');
-tbody.innerHTML='';
+lista.innerHTML='';
 let total=0;
 mesas[mesaAtual].forEach(p=>{
 total+=p.total;
-tbody.innerHTML+=`<tr><td>${p.nome}</td><td>${p.qtd}</td><td>R$ ${p.total.toFixed(2)}</td></tr>`;
+lista.innerHTML+=`<tr><td>${p.nome}</td><td>${p.qtd}</td><td>R$ ${p.total.toFixed(2)}</td></tr>`;
 });
-document.getElementById('totalMesa').innerText='Total: R$ '+total.toFixed(2);
-renderMesas();
-salvar();
+totalMesa.innerText='Total da Mesa: R$ '+total.toFixed(2);
+render();
 }
 
-function adicionarItem(){
-let prod=cardapio[document.getElementById('produto').value];
-let qtd=parseInt(document.getElementById('qtd').value);
-mesas[mesaAtual].push({nome:prod.nome,qtd:qtd,total:prod.preco*qtd});
+function addPedido(){
+let p=cardapio[produto.value];
+let q=parseInt(qtd.value);
+mesas[mesaAtual].push({nome:p.nome,qtd:q,total:p.preco*q});
 atualizarMesa();
 }
 
-function fecharMesa(){
-let total=mesas[mesaAtual].reduce((s,x)=>s+x.total,0);
-if(total<=0)return alert('Mesa vazia!');
-historico.unshift({
-mesa:mesaAtual+1,
-total:total,
-data:new Date().toLocaleString('pt-BR')
-});
+function fecharConta(){
+let total=mesas[mesaAtual].reduce((a,b)=>a+b.total,0);
+if(total===0){alert('Mesa vazia!');return;}
+historico.unshift({mesa:mesaAtual+1,total});
 mesas[mesaAtual]=[];
 atualizarMesa();
-alert('Conta fechada!');
+alert('Conta fechada com sucesso!');
 }
 
-function novoProduto(){
-let nome=document.getElementById('novoNome').value;
-let preco=parseFloat(document.getElementById('novoPreco').value);
-if(!nome||!preco)return;
-cardapio.push({nome,preco});
-carregarCardapio();
-salvar();
-alert('Produto adicionado!');
-}
-
-carregarCardapio();
-renderMesas();
+carregarProdutos();
+render();
 </script>
 </body>
 </html>
